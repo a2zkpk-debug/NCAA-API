@@ -1030,19 +1030,28 @@
     if (!VARIATIONS.length) return null;
 
     return VARIATIONS.filter(function (variation) {
-      var text = [
-        variation.variation || "",
-        (variation.__attributes || variation.attributes || []).map(function (attribute) {
-          return [attribute.name || "", attribute.value || ""].join(": ");
-        }).join(" ")
-      ].join(" ").toLowerCase();
-
-      var sizeMatches = !selectedSize || text.indexOf(String(selectedSize).toLowerCase()) >= 0;
-      var hasColorAttribute = text.indexOf("color:") >= 0 || text.indexOf("colour:") >= 0;
-      var colorMatches = !selectedColor || text.indexOf(String(selectedColor).toLowerCase()) >= 0 || !hasColorAttribute;
+      var attributes = variation.__attributes || variation.attributes || [];
+      var text = String(variation.variation || "").toLowerCase();
+      var sizeValue = getVariationAttributeValue(attributes, /size/i);
+      var colorValue = getVariationAttributeValue(attributes, /colou?r/i);
+      var sizeMatches = !selectedSize ||
+        String(sizeValue || "").toLowerCase() === String(selectedSize).toLowerCase() ||
+        text.indexOf(String(selectedSize).toLowerCase()) >= 0;
+      var colorMatches = !selectedColor ||
+        !colorValue ||
+        String(colorValue).toLowerCase() === String(selectedColor).toLowerCase() ||
+        text.indexOf(String(selectedColor).toLowerCase()) >= 0;
 
       return sizeMatches && colorMatches;
     })[0] || null;
+  }
+
+  function getVariationAttributeValue(attributes, pattern) {
+    var match = (attributes || []).filter(function (attribute) {
+      return pattern.test(attribute.name || "");
+    })[0];
+
+    return match && match.value ? match.value : "";
   }
 
   function renderMainButton() {
@@ -1124,6 +1133,9 @@
       });
       window.location.href = DESIGNER_URL + "?" + params.toString();
       return;
+    }
+    if (VARIATIONS.length && !selectedVariation) {
+      selectedVariation = findMatchingVariation();
     }
     if (VARIATIONS.length && !selectedVariation) {
       showToast("Please choose an available size");

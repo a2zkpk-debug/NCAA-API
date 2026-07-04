@@ -1,0 +1,814 @@
+<!-- ============================================================
+     VIBECANO — PREMIUM HERO + INTEGRATED HEADER
+     Paste this whole file into an Elementor HTML widget.
+     ============================================================ -->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@700;800;900&family=Noto+Nastaliq+Urdu&display=swap");
+
+  .vc-hero-shell,
+  .vc-hero-shell * {
+    box-sizing: border-box;
+  }
+
+  .vc-hero-shell {
+    --vc-hero-bg: #07111f;
+    --vc-hero-panel: rgba(255, 255, 255, 0.09);
+    --vc-hero-panel-strong: rgba(255, 255, 255, 0.14);
+    --vc-hero-text: #ffffff;
+    --vc-hero-muted: #cbd5e1;
+    --vc-hero-soft: #94a3b8;
+    --vc-hero-orange: #f97316;
+    --vc-hero-orange-dark: #ea580c;
+    --vc-hero-blue: #2563eb;
+    --vc-hero-cyan: #06b6d4;
+    --vc-hero-green: #22c55e;
+    position: relative;
+    overflow: hidden;
+    min-height: 760px;
+    color: var(--vc-hero-text);
+    background:
+      radial-gradient(circle at 10% 15%, rgba(249, 115, 22, 0.22), transparent 28%),
+      radial-gradient(circle at 88% 14%, rgba(37, 99, 235, 0.28), transparent 30%),
+      radial-gradient(circle at 70% 85%, rgba(6, 182, 212, 0.16), transparent 34%),
+      linear-gradient(135deg, #07111f 0%, #0f172a 46%, #172554 100%);
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    isolation: isolate;
+  }
+
+  .vc-hero-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(to bottom, black, transparent 84%);
+  }
+
+  .vc-hero-shell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(120deg, rgba(255, 255, 255, 0.1), transparent 22%, transparent 70%, rgba(255, 255, 255, 0.06)),
+      radial-gradient(circle at 50% 0, rgba(255, 255, 255, 0.1), transparent 38%);
+    pointer-events: none;
+  }
+
+  .vc-hero-orb {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(8px);
+    opacity: 0.85;
+    pointer-events: none;
+  }
+
+  .vc-hero-orb.one {
+    top: 118px;
+    right: 8%;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(249, 115, 22, 0.48), transparent 68%);
+    animation: vcHeroFloat 8s ease-in-out infinite;
+  }
+
+  .vc-hero-orb.two {
+    left: 7%;
+    bottom: 110px;
+    width: 190px;
+    height: 190px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.42), transparent 70%);
+    animation: vcHeroFloat 10s ease-in-out infinite reverse;
+  }
+
+  @keyframes vcHeroFloat {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(14px, -18px, 0) scale(1.06); }
+  }
+
+  .vc-hero-header {
+    position: relative;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(7, 17, 31, 0.22);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: background 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  }
+
+  .vc-hero-header.is-stuck {
+    position: fixed;
+    inset: 0 0 auto;
+    background: rgba(7, 17, 31, 0.88);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 20px 50px -34px rgba(0, 0, 0, 0.85);
+    animation: vcHeroHeaderDown 0.28s ease;
+  }
+
+  @keyframes vcHeroHeaderDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+  }
+
+  .vc-hero-header-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 16px 24px;
+  }
+
+  .vc-hero-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .vc-hero-logo-mark {
+    position: relative;
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--vc-hero-orange), var(--vc-hero-blue));
+    box-shadow: 0 18px 35px -20px rgba(249, 115, 22, 0.95);
+    font-family: Poppins, sans-serif;
+    font-size: 19px;
+    font-weight: 900;
+  }
+
+  .vc-hero-logo-title {
+    font-family: Poppins, sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .vc-hero-logo-sub {
+    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .vc-hero-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .vc-hero-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 0 13px;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 13px;
+    font-weight: 750;
+    text-decoration: none;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+
+  .vc-hero-nav a:hover,
+  .vc-hero-nav a:focus-visible {
+    background: rgba(255, 255, 255, 0.11);
+    color: #fff;
+  }
+
+  .vc-hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .vc-hero-wa,
+  .vc-hero-cart,
+  .vc-hero-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .vc-hero-wa {
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 15px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 900;
+    box-shadow: 0 16px 28px -22px rgba(34, 197, 94, 0.95);
+    transition: transform 0.18s ease, filter 0.18s ease;
+  }
+
+  .vc-hero-wa:hover,
+  .vc-hero-wa:focus-visible {
+    filter: saturate(1.08);
+    transform: translateY(-1px);
+  }
+
+  .vc-hero-cart,
+  .vc-hero-menu {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    transition: background 0.18s ease, transform 0.18s ease;
+  }
+
+  .vc-hero-cart:hover,
+  .vc-hero-menu:hover,
+  .vc-hero-cart:focus-visible,
+  .vc-hero-menu:focus-visible {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .vc-hero-cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 21px;
+    height: 21px;
+    padding: 0 6px;
+    border: 2px solid #07111f;
+    border-radius: 999px;
+    background: var(--vc-hero-orange);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 17px;
+    text-align: center;
+  }
+
+  .vc-hero-menu {
+    display: none;
+  }
+
+  .vc-hero-mobile {
+    display: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(7, 17, 31, 0.96);
+  }
+
+  .vc-hero-mobile.is-open {
+    display: block;
+  }
+
+  .vc-hero-mobile-inner {
+    display: grid;
+    gap: 6px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 12px 20px 16px;
+  }
+
+  .vc-hero-mobile a {
+    padding: 13px 14px;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .vc-hero-mobile a:hover,
+  .vc-hero-mobile a:focus-visible {
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  .vc-hero {
+    position: relative;
+    z-index: 2;
+    padding: 74px 24px 92px;
+  }
+
+  .vc-hero-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(360px, 0.98fr);
+    gap: clamp(36px, 5vw, 68px);
+    align-items: center;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .vc-hero-copy {
+    position: relative;
+  }
+
+  .vc-hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 15px;
+    border: 1px solid rgba(249, 115, 22, 0.36);
+    border-radius: 999px;
+    background: rgba(249, 115, 22, 0.13);
+    color: #fed7aa;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    backdrop-filter: blur(12px);
+  }
+
+  .vc-hero-eyebrow i {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--vc-hero-orange);
+    box-shadow: 0 0 0 7px rgba(249, 115, 22, 0.13), 0 0 18px rgba(249, 115, 22, 0.9);
+  }
+
+  .vc-hero h1 {
+    max-width: 740px;
+    margin: 22px 0 18px;
+    font-family: Poppins, Inter, sans-serif;
+    font-size: clamp(40px, 5.5vw, 74px);
+    font-weight: 900;
+    line-height: 0.98;
+    letter-spacing: -0.062em;
+  }
+
+  .vc-hero-gradient {
+    background: linear-gradient(90deg, #fb923c, #fef3c7 48%, #67e8f9);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .vc-hero-urdu {
+    max-width: 650px;
+    margin: 0 0 16px;
+    color: #dbeafe;
+    direction: rtl;
+    font-family: "Noto Nastaliq Urdu", serif;
+    font-size: clamp(18px, 2.2vw, 26px);
+    line-height: 1.9;
+  }
+
+  .vc-hero-sub {
+    max-width: 610px;
+    margin: 0 0 30px;
+    color: var(--vc-hero-muted);
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.75;
+  }
+
+  .vc-hero-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 13px;
+    margin-bottom: 34px;
+  }
+
+  .vc-hero-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 0 24px;
+    border-radius: 16px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 900;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .vc-hero-btn.primary {
+    background: linear-gradient(135deg, var(--vc-hero-orange), var(--vc-hero-orange-dark));
+    box-shadow: 0 24px 44px -24px rgba(249, 115, 22, 0.95);
+  }
+
+  .vc-hero-btn.secondary {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.09);
+    backdrop-filter: blur(12px);
+  }
+
+  .vc-hero-btn:hover,
+  .vc-hero-btn:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .vc-hero-btn.primary:hover,
+  .vc-hero-btn.primary:focus-visible {
+    box-shadow: 0 30px 54px -26px rgba(249, 115, 22, 1);
+  }
+
+  .vc-hero-btn.secondary:hover,
+  .vc-hero-btn.secondary:focus-visible {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .vc-hero-proof {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 620px;
+  }
+
+  .vc-hero-proof-item {
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(12px);
+  }
+
+  .vc-hero-proof-item b {
+    display: block;
+    color: #fff;
+    font-family: Poppins, sans-serif;
+    font-size: clamp(20px, 2.4vw, 28px);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+  }
+
+  .vc-hero-proof-item span {
+    display: block;
+    margin-top: 4px;
+    color: var(--vc-hero-soft);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .vc-hero-visual {
+    position: relative;
+    min-height: 560px;
+  }
+
+  .vc-hero-product {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    min-height: 560px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 34px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.03)),
+      #0f172a;
+    box-shadow: 0 42px 90px -48px rgba(0, 0, 0, 0.95);
+  }
+
+  .vc-hero-product::before {
+    content: "";
+    position: absolute;
+    inset: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 26px;
+    pointer-events: none;
+  }
+
+  .vc-hero-product img {
+    width: 100%;
+    height: 100%;
+    min-height: 560px;
+    display: block;
+    object-fit: cover;
+    filter: saturate(1.08) contrast(1.04);
+  }
+
+  .vc-hero-product::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(7, 17, 31, 0.78), transparent 48%);
+    pointer-events: none;
+  }
+
+  .vc-hero-design-card,
+  .vc-hero-delivery-card,
+  .vc-hero-price-card {
+    position: absolute;
+    z-index: 3;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.9);
+    color: #0f172a;
+    box-shadow: 0 24px 54px -30px rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(18px);
+  }
+
+  .vc-hero-design-card {
+    left: -22px;
+    bottom: 34px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    width: min(330px, 86%);
+    padding: 15px;
+    border-radius: 22px;
+  }
+
+  .vc-hero-design-icon {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    flex: 0 0 auto;
+    place-items: center;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--vc-hero-blue), var(--vc-hero-orange));
+    color: #fff;
+    font-size: 22px;
+    font-weight: 900;
+  }
+
+  .vc-hero-design-card b,
+  .vc-hero-delivery-card b,
+  .vc-hero-price-card b {
+    display: block;
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  .vc-hero-design-card span,
+  .vc-hero-delivery-card span,
+  .vc-hero-price-card span {
+    display: block;
+    margin-top: 3px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  .vc-hero-delivery-card {
+    top: 34px;
+    right: -18px;
+    width: 190px;
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .vc-hero-price-card {
+    top: 168px;
+    left: -10px;
+    width: 178px;
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .vc-hero-mini {
+    display: flex;
+    gap: 7px;
+    margin-top: 10px;
+  }
+
+  .vc-hero-mini i {
+    width: 25px;
+    height: 25px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(249, 115, 22, 0.15));
+  }
+
+  .vc-hero-scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transform: translateX(-50%);
+  }
+
+  .vc-hero-scroll i {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    animation: vcHeroScroll 1.3s ease-in-out infinite;
+  }
+
+  @keyframes vcHeroScroll {
+    0%, 100% { transform: translateY(-2px) rotate(45deg); opacity: 0.45; }
+    50% { transform: translateY(4px) rotate(45deg); opacity: 1; }
+  }
+
+  @media (max-width: 1080px) {
+    .vc-hero-nav { display: none; }
+    .vc-hero-menu { display: inline-flex; }
+    .vc-hero-wrap { grid-template-columns: 1fr; }
+    .vc-hero-visual { max-width: 640px; width: 100%; margin: 0 auto; }
+  }
+
+  @media (max-width: 720px) {
+    .vc-hero-shell { min-height: auto; }
+    .vc-hero-header-wrap { padding: 13px 16px; }
+    .vc-hero-logo-mark { width: 40px; height: 40px; }
+    .vc-hero-logo-title { font-size: 18px; }
+    .vc-hero-wa span { display: none; }
+    .vc-hero-wa { width: 42px; padding: 0; }
+    .vc-hero { padding: 48px 16px 78px; }
+    .vc-hero h1 { font-size: clamp(36px, 12vw, 54px); }
+    .vc-hero-sub { font-size: 15px; }
+    .vc-hero-cta { display: grid; }
+    .vc-hero-btn { width: 100%; }
+    .vc-hero-proof { grid-template-columns: 1fr; }
+    .vc-hero-visual,
+    .vc-hero-product,
+    .vc-hero-product img { min-height: 430px; }
+    .vc-hero-design-card { left: 14px; right: 14px; bottom: 18px; width: auto; }
+    .vc-hero-delivery-card { right: 14px; top: 18px; }
+    .vc-hero-price-card { display: none; }
+  }
+
+  @media (max-width: 420px) {
+    .vc-hero-logo-sub { display: none; }
+    .vc-hero-cart { display: none; }
+    .vc-hero-eyebrow { font-size: 10px; }
+    .vc-hero-urdu { font-size: 17px; }
+    .vc-hero-delivery-card { width: 164px; }
+  }
+</style>
+
+<section class="vc-hero-shell">
+  <span class="vc-hero-orb one" aria-hidden="true"></span>
+  <span class="vc-hero-orb two" aria-hidden="true"></span>
+
+  <header class="vc-hero-header" id="vcHeroHeader">
+    <div class="vc-hero-header-wrap">
+      <a href="/" class="vc-hero-logo" aria-label="Vibecano home">
+        <span class="vc-hero-logo-mark">V</span>
+        <span>
+          <span class="vc-hero-logo-title">vibecano</span>
+          <span class="vc-hero-logo-sub">Custom Apparel</span>
+        </span>
+      </a>
+
+      <nav class="vc-hero-nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/shop/">Shop</a>
+        <a href="/designer/">Design Your Product</a>
+        <a href="/gallery/">Gallery</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+
+      <div class="vc-hero-actions">
+        <a class="vc-hero-wa" href="https://wa.me/923332929254" target="_blank" rel="noopener">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.9 11.9 0 0 0 12 0C5.4 0 .1 5.3.1 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.4-1.7a11.9 11.9 0 0 0 5.6 1.4h.1c6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.3zM12 21.5c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.8 1 1-3.7-.2-.4a9.5 9.5 0 1 1 8.4 4.7z"/></svg>
+          <span>WhatsApp</span>
+        </a>
+
+        <a class="vc-hero-cart" href="/cart/" aria-label="Open cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="vc-hero-cart-count">2</span>
+        </a>
+
+        <button class="vc-hero-menu" id="vcHeroMenu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="vcHeroMobile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="vc-hero-mobile" id="vcHeroMobile">
+      <div class="vc-hero-mobile-inner">
+        <a href="/">Home</a>
+        <a href="/shop/">Shop</a>
+        <a href="/designer/">Design Your Product</a>
+        <a href="/gallery/">Gallery</a>
+        <a href="/contact/">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="vc-hero">
+    <div class="vc-hero-wrap">
+      <div class="vc-hero-copy">
+        <div class="vc-hero-eyebrow"><i></i> Pakistan's custom apparel studio</div>
+        <h1>Create premium <span class="vc-hero-gradient">custom apparel</span> in minutes.</h1>
+        <p class="vc-hero-urdu">اپنی پسند کی ٹی شرٹ، کیپ اور کپڑے خود ڈیزائن کریں — آسانی سے، خوبصورتی سے</p>
+        <p class="vc-hero-sub">Upload your logo, add text, choose colors, and preview your design before ordering. Vibecano prints clean, bold, ready-to-wear products for teams, brands, gifts, and events.</p>
+
+        <div class="vc-hero-cta">
+          <a href="/designer/" class="vc-hero-btn primary">Start Designing Now</a>
+          <a href="/shop/" class="vc-hero-btn secondary">Browse Products</a>
+        </div>
+
+        <div class="vc-hero-proof" aria-label="Vibecano highlights">
+          <div class="vc-hero-proof-item"><b>10k+</b><span>Happy Customers</span></div>
+          <div class="vc-hero-proof-item"><b>48 Hr</b><span>Fast Production</span></div>
+          <div class="vc-hero-proof-item"><b>4.9</b><span>Customer Rating</span></div>
+        </div>
+      </div>
+
+      <div class="vc-hero-visual">
+        <div class="vc-hero-product">
+          <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1100&q=85" alt="Custom apparel preview">
+        </div>
+
+        <div class="vc-hero-delivery-card">
+          <b>Fast delivery</b>
+          <span>Printed and prepared with care.</span>
+          <div class="vc-hero-mini"><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="vc-hero-price-card">
+          <b>Live preview</b>
+          <span>See the design before checkout.</span>
+        </div>
+
+        <div class="vc-hero-design-card">
+          <div class="vc-hero-design-icon">✓</div>
+          <div>
+            <b>Design online instantly</b>
+            <span>Add logo, text, artwork, and colors with a simple live designer.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="vc-hero-scroll" aria-hidden="true">Scroll <i></i></div>
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  var header = document.getElementById("vcHeroHeader");
+  var menu = document.getElementById("vcHeroMenu");
+  var mobile = document.getElementById("vcHeroMobile");
+  var spacer = null;
+  var isStuck = false;
+
+  if (!header) {
+    return;
+  }
+
+  function setStickyHeader() {
+    var shouldStick = window.scrollY > 86;
+
+    if (shouldStick === isStuck) {
+      return;
+    }
+
+    isStuck = shouldStick;
+
+    if (shouldStick) {
+      spacer = document.createElement("div");
+      spacer.style.height = header.offsetHeight + "px";
+      header.parentNode.insertBefore(spacer, header);
+      header.classList.add("is-stuck");
+      return;
+    }
+
+    header.classList.remove("is-stuck");
+    if (spacer) {
+      spacer.remove();
+      spacer = null;
+    }
+  }
+
+  window.addEventListener("scroll", setStickyHeader, { passive: true });
+  window.addEventListener("resize", function () {
+    if (spacer) {
+      spacer.style.height = header.offsetHeight + "px";
+    }
+  });
+  setStickyHeader();
+
+  if (menu && mobile) {
+    menu.addEventListener("click", function () {
+      var isOpen = mobile.classList.toggle("is-open");
+      menu.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+})();
+</script>

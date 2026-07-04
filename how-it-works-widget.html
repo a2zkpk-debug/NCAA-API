@@ -1,0 +1,396 @@
+<!-- ============================================================
+     VIBECANO — HOW IT WORKS
+     Paste this whole file into an Elementor HTML widget.
+
+     Focus:
+     - Ready-made Vibecano designs
+     - Designs made by Vibecano
+     - Optional customer self-design
+     ============================================================ -->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Manrope:wght@700;800&display=swap");
+
+  .vc-how,
+  .vc-how * {
+    box-sizing: border-box;
+  }
+
+  .vc-how {
+    position: relative;
+    overflow: hidden;
+    padding: 96px 20px;
+    background:
+      radial-gradient(circle at 88% 8%, rgba(249, 115, 22, 0.2), transparent 30%),
+      radial-gradient(circle at 12% 82%, rgba(37, 99, 235, 0.22), transparent 34%),
+      linear-gradient(135deg, #07111f 0%, #0f172a 48%, #172554 100%);
+    color: #fff;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    isolation: isolate;
+  }
+
+  .vc-how::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: linear-gradient(to bottom, black, transparent 82%);
+  }
+
+  .vc-how-inner {
+    position: relative;
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .vc-how-head {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.55fr);
+    gap: 38px;
+    align-items: end;
+    margin-bottom: 42px;
+  }
+
+  .vc-how-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 14px;
+    padding: 8px 13px;
+    border: 1px solid rgba(249, 115, 22, 0.34);
+    border-radius: 999px;
+    background: rgba(249, 115, 22, 0.13);
+    color: #fed7aa;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .vc-how-kicker::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #f97316;
+    box-shadow: 0 0 0 6px rgba(249, 115, 22, 0.13), 0 0 18px rgba(249, 115, 22, 0.72);
+  }
+
+  .vc-how-title {
+    max-width: 780px;
+    margin: 0;
+    font-family: Manrope, Inter, sans-serif;
+    font-size: clamp(31px, 4vw, 50px);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.028em;
+  }
+
+  .vc-how-title span {
+    color: #fb923c;
+  }
+
+  .vc-how-sub {
+    max-width: 620px;
+    margin: 16px 0 0;
+    color: #cbd5e1;
+    font-size: 16px;
+    font-weight: 550;
+    line-height: 1.75;
+  }
+
+  .vc-how-note {
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #dbeafe;
+    box-shadow: 0 28px 58px -42px rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(14px);
+  }
+
+  .vc-how-note b {
+    display: block;
+    margin-bottom: 7px;
+    color: #fff;
+    font-family: Manrope, Inter, sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+
+  .vc-how-note p {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.65;
+  }
+
+  .vc-how-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .vc-how-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 300px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.045)),
+      rgba(255, 255, 255, 0.04);
+    box-shadow: 0 24px 58px -44px rgba(0, 0, 0, 0.9);
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .vc-how-card::before {
+    content: "";
+    position: absolute;
+    inset: auto -30% -45% auto;
+    width: 190px;
+    height: 190px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.24), transparent 68%);
+    pointer-events: none;
+  }
+
+  .vc-how-card.is-primary {
+    border-color: rgba(249, 115, 22, 0.35);
+    background:
+      radial-gradient(circle at top right, rgba(249, 115, 22, 0.18), transparent 42%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  }
+
+  .vc-how-card:hover,
+  .vc-how-card:focus-within {
+    border-color: rgba(249, 115, 22, 0.34);
+    background:
+      radial-gradient(circle at top right, rgba(249, 115, 22, 0.14), transparent 44%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06));
+    transform: translateY(-6px);
+  }
+
+  .vc-how-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .vc-how-icon {
+    display: grid;
+    width: 56px;
+    height: 56px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.09);
+    color: #fed7aa;
+  }
+
+  .vc-how-icon svg {
+    width: 27px;
+    height: 27px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .vc-how-number {
+    color: rgba(255, 255, 255, 0.14);
+    font-family: Manrope, Inter, sans-serif;
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .vc-how-card h3 {
+    position: relative;
+    margin: 0 0 12px;
+    color: #fff;
+    font-family: Manrope, Inter, sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.24;
+    letter-spacing: -0.018em;
+  }
+
+  .vc-how-card p {
+    position: relative;
+    margin: 0;
+    color: #aebfd4;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.7;
+  }
+
+  .vc-how-tag {
+    position: relative;
+    display: inline-flex;
+    margin-top: 22px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .vc-how-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 13px;
+    margin-top: 42px;
+  }
+
+  .vc-how-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 0 24px;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 900;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .vc-how-btn.primary {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    box-shadow: 0 24px 44px -24px rgba(249, 115, 22, 0.95);
+  }
+
+  .vc-how-btn.secondary {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+  }
+
+  .vc-how-btn:hover,
+  .vc-how-btn:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 1080px) {
+    .vc-how-head {
+      grid-template-columns: 1fr;
+    }
+
+    .vc-how-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 680px) {
+    .vc-how {
+      padding: 70px 16px;
+    }
+
+    .vc-how-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .vc-how-card {
+      min-height: auto;
+      padding: 22px;
+      border-radius: 24px;
+    }
+
+    .vc-how-actions {
+      display: grid;
+    }
+
+    .vc-how-btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<section class="vc-how">
+  <div class="vc-how-inner">
+    <div class="vc-how-head">
+      <div>
+        <span class="vc-how-kicker">How Vibecano works</span>
+        <h2 class="vc-how-title">Choose a design, or let <span>Vibecano design it</span> for you.</h2>
+        <p class="vc-how-sub">Our main focus is ready-made and Vibecano-created designs that look clean, modern, and wearable. If you already have your own idea, you can still customize a product yourself.</p>
+      </div>
+
+      <div class="vc-how-note">
+        <b>Made for simple ordering</b>
+        <p>Pick a ready-made product, request a design from us, or use the designer tool. We handle the print quality and delivery.</p>
+      </div>
+    </div>
+
+    <div class="vc-how-grid">
+      <article class="vc-how-card is-primary">
+        <div class="vc-how-top">
+          <span class="vc-how-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="m4 15 4-4 4 4 3-3 5 5"/><circle cx="15.5" cy="8.5" r="1.5"/></svg>
+          </span>
+          <span class="vc-how-number">01</span>
+        </div>
+        <h3>Choose your Vibecano vibe</h3>
+        <p>Browse Vibecano ready-made products and choose a design you like. These are already prepared, priced, and ready to order.</p>
+        <span class="vc-how-tag">Main focus</span>
+      </article>
+
+      <article class="vc-how-card is-primary">
+        <div class="vc-how-top">
+          <span class="vc-how-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+          </span>
+          <span class="vc-how-number">02</span>
+        </div>
+        <h3>Let us create your look</h3>
+        <p>Tell us your theme, text, logo, or idea. We create a clean design for you so your product matches the Vibecano vibe.</p>
+        <span class="vc-how-tag">Designed by us</span>
+      </article>
+
+      <article class="vc-how-card">
+        <div class="vc-how-top">
+          <span class="vc-how-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13 16.5 5.5 2 2l3.5 14.5L13 18z"/><circle cx="11" cy="11" r="2"/></svg>
+          </span>
+          <span class="vc-how-number">03</span>
+        </div>
+        <h3>Add your personal touch</h3>
+        <p>Want full control? Use the online designer to add your text, logo, artwork, and placement before ordering.</p>
+        <span class="vc-how-tag">Optional</span>
+      </article>
+
+      <article class="vc-how-card">
+        <div class="vc-how-top">
+          <span class="vc-how-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </span>
+          <span class="vc-how-number">04</span>
+        </div>
+        <h3>Printed fresh, delivered fast</h3>
+        <p>After your order is confirmed, we print carefully, pack your product, and deliver it to your doorstep.</p>
+        <span class="vc-how-tag">Final step</span>
+      </article>
+    </div>
+
+    <div class="vc-how-actions">
+      <a class="vc-how-btn primary" href="/product-category/ready-made/">Shop Ready-Made Designs</a>
+      <a class="vc-how-btn secondary" href="/designer/">Design Your Own</a>
+    </div>
+  </div>
+</section>

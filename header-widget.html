@@ -1,0 +1,383 @@
+<!-- ============================================================
+     VIBECANO — STANDALONE HEADER
+     Paste this whole file into an Elementor HTML widget/header area.
+     This matches the premium header style used in the hero section.
+     ============================================================ -->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Manrope:wght@700;800&display=swap");
+
+  .vc-site-header,
+  .vc-site-header * {
+    box-sizing: border-box;
+  }
+
+  .vc-site-header {
+    position: relative;
+    z-index: 9999;
+    width: 100%;
+    color: #fff;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  .vc-site-header-bar {
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background:
+      radial-gradient(circle at 8% 0%, rgba(249, 115, 22, 0.16), transparent 28%),
+      radial-gradient(circle at 92% 0%, rgba(37, 99, 235, 0.18), transparent 30%),
+      rgba(7, 17, 31, 0.86);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    transition: background 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  }
+
+  .vc-site-header-bar.is-stuck {
+    position: fixed;
+    inset: 0 0 auto;
+    background: rgba(7, 17, 31, 0.92);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 20px 50px -34px rgba(0, 0, 0, 0.85);
+    animation: vcHeaderDown 0.28s ease;
+  }
+
+  @keyframes vcHeaderDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+  }
+
+  .vc-site-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 16px 24px;
+  }
+
+  .vc-site-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .vc-site-logo-mark {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #f97316, #2563eb);
+    box-shadow: 0 18px 35px -20px rgba(249, 115, 22, 0.95);
+    font-family: Manrope, Inter, sans-serif;
+    font-size: 19px;
+    font-weight: 800;
+  }
+
+  .vc-site-logo-title {
+    display: block;
+    color: #fff;
+    font-family: Manrope, Inter, sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+
+  .vc-site-logo-sub {
+    display: block;
+    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+  }
+
+  .vc-site-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .vc-site-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 0 13px;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.84);
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+
+  .vc-site-nav a:hover,
+  .vc-site-nav a:focus-visible {
+    background: rgba(255, 255, 255, 0.11);
+    color: #fff;
+  }
+
+  .vc-site-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .vc-site-wa,
+  .vc-site-cart,
+  .vc-site-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .vc-site-wa {
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 15px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 900;
+    box-shadow: 0 16px 28px -22px rgba(34, 197, 94, 0.95);
+    transition: transform 0.18s ease, filter 0.18s ease;
+  }
+
+  .vc-site-wa:hover,
+  .vc-site-wa:focus-visible {
+    filter: saturate(1.08);
+    transform: translateY(-1px);
+  }
+
+  .vc-site-cart,
+  .vc-site-menu {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    transition: background 0.18s ease, transform 0.18s ease;
+  }
+
+  .vc-site-cart:hover,
+  .vc-site-menu:hover,
+  .vc-site-cart:focus-visible,
+  .vc-site-menu:focus-visible {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .vc-site-cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    min-width: 21px;
+    height: 21px;
+    padding: 0 6px;
+    border: 2px solid #07111f;
+    border-radius: 999px;
+    background: #f97316;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 17px;
+    text-align: center;
+  }
+
+  .vc-site-menu {
+    display: none;
+  }
+
+  .vc-site-mobile {
+    display: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(7, 17, 31, 0.96);
+  }
+
+  .vc-site-mobile.is-open {
+    display: block;
+  }
+
+  .vc-site-mobile-inner {
+    display: grid;
+    gap: 6px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 12px 20px 16px;
+  }
+
+  .vc-site-mobile a {
+    padding: 13px 14px;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .vc-site-mobile a:hover,
+  .vc-site-mobile a:focus-visible {
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  @media (max-width: 1080px) {
+    .vc-site-nav {
+      display: none;
+    }
+
+    .vc-site-menu {
+      display: inline-flex;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .vc-site-header-inner {
+      padding: 13px 16px;
+    }
+
+    .vc-site-logo-mark {
+      width: 40px;
+      height: 40px;
+    }
+
+    .vc-site-logo-title {
+      font-size: 18px;
+    }
+
+    .vc-site-wa span {
+      display: none;
+    }
+
+    .vc-site-wa {
+      width: 42px;
+      padding: 0;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .vc-site-logo-sub,
+    .vc-site-cart {
+      display: none;
+    }
+  }
+</style>
+
+<header class="vc-site-header">
+  <div class="vc-site-header-bar" id="vcSiteHeaderBar">
+    <div class="vc-site-header-inner">
+      <a href="/" class="vc-site-logo" aria-label="Vibecano home">
+        <span class="vc-site-logo-mark">V</span>
+        <span>
+          <span class="vc-site-logo-title">vibecano</span>
+          <span class="vc-site-logo-sub">Ready-made & custom apparel</span>
+        </span>
+      </a>
+
+      <nav class="vc-site-nav" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/shop/">Shop</a>
+        <a href="/product-category/ready-made/">Ready-Made</a>
+        <a href="/product-category/customize/">Customize</a>
+        <a href="/designer/">Design Tool</a>
+        <a href="/contact/">Contact</a>
+      </nav>
+
+      <div class="vc-site-actions">
+        <a class="vc-site-wa" href="https://wa.me/923332929254" target="_blank" rel="noopener">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.9 11.9 0 0 0 12 0C5.4 0 .1 5.3.1 11.9c0 2.1.5 4.1 1.6 5.9L0 24l6.4-1.7a11.9 11.9 0 0 0 5.6 1.4h.1c6.6 0 11.9-5.3 11.9-11.9 0-3.2-1.2-6.2-3.5-8.3zM12 21.5c-1.8 0-3.5-.5-5-1.4l-.4-.2-3.8 1 1-3.7-.2-.4a9.5 9.5 0 1 1 8.4 4.7z"/></svg>
+          <span>WhatsApp</span>
+        </a>
+
+        <a class="vc-site-cart" href="/cart/" aria-label="Open cart">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="vc-site-cart-count">0</span>
+        </a>
+
+        <button class="vc-site-menu" id="vcSiteMenu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="vcSiteMobile">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="vc-site-mobile" id="vcSiteMobile">
+      <div class="vc-site-mobile-inner">
+        <a href="/">Home</a>
+        <a href="/shop/">Shop</a>
+        <a href="/product-category/ready-made/">Ready-Made</a>
+        <a href="/product-category/customize/">Customize</a>
+        <a href="/designer/">Design Tool</a>
+        <a href="/contact/">Contact</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+(function () {
+  "use strict";
+
+  var bar = document.getElementById("vcSiteHeaderBar");
+  var menu = document.getElementById("vcSiteMenu");
+  var mobile = document.getElementById("vcSiteMobile");
+  var spacer = null;
+  var isStuck = false;
+
+  if (!bar) {
+    return;
+  }
+
+  function setStickyHeader() {
+    var shouldStick = window.scrollY > 48;
+
+    if (shouldStick === isStuck) {
+      return;
+    }
+
+    isStuck = shouldStick;
+
+    if (shouldStick) {
+      spacer = document.createElement("div");
+      spacer.style.height = bar.offsetHeight + "px";
+      bar.parentNode.insertBefore(spacer, bar);
+      bar.classList.add("is-stuck");
+      return;
+    }
+
+    bar.classList.remove("is-stuck");
+    if (spacer) {
+      spacer.remove();
+      spacer = null;
+    }
+  }
+
+  window.addEventListener("scroll", setStickyHeader, { passive: true });
+  window.addEventListener("resize", function () {
+    if (spacer) {
+      spacer.style.height = bar.offsetHeight + "px";
+    }
+  });
+  setStickyHeader();
+
+  if (menu && mobile) {
+    menu.addEventListener("click", function () {
+      var isOpen = mobile.classList.toggle("is-open");
+      menu.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+})();
+</script>

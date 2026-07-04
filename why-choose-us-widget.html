@@ -1,0 +1,362 @@
+<!-- ============================================================
+     VIBECANO — WHY CHOOSE US
+     Paste this whole file into an Elementor HTML widget.
+     ============================================================ -->
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Manrope:wght@700;800&display=swap");
+
+  .vc-why,
+  .vc-why * {
+    box-sizing: border-box;
+  }
+
+  .vc-why {
+    position: relative;
+    overflow: hidden;
+    padding: 92px 20px;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(37, 99, 235, 0.18), transparent 30%),
+      radial-gradient(circle at 88% 85%, rgba(249, 115, 22, 0.16), transparent 32%),
+      linear-gradient(135deg, #07111f 0%, #0f172a 52%, #172554 100%);
+    color: #fff;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    isolation: isolate;
+  }
+
+  .vc-why::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: linear-gradient(to bottom, black, transparent 78%);
+  }
+
+  .vc-why-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  .vc-why-head {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(280px, 0.46fr);
+    gap: 34px;
+    align-items: end;
+    margin-bottom: 36px;
+  }
+
+  .vc-why-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 14px;
+    padding: 8px 13px;
+    border: 1px solid rgba(249, 115, 22, 0.34);
+    border-radius: 999px;
+    background: rgba(249, 115, 22, 0.13);
+    color: #fed7aa;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .vc-why-kicker::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: #f97316;
+    box-shadow: 0 0 0 6px rgba(249, 115, 22, 0.13), 0 0 18px rgba(249, 115, 22, 0.7);
+  }
+
+  .vc-why-title {
+    max-width: 760px;
+    margin: 0;
+    font-family: Manrope, Inter, sans-serif;
+    font-size: clamp(31px, 4vw, 50px);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.028em;
+  }
+
+  .vc-why-title span {
+    color: #fb923c;
+  }
+
+  .vc-why-sub {
+    max-width: 620px;
+    margin: 15px 0 0;
+    color: #cbd5e1;
+    font-size: 16px;
+    font-weight: 550;
+    line-height: 1.75;
+  }
+
+  .vc-why-mini {
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #dbeafe;
+    box-shadow: 0 28px 58px -42px rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(14px);
+  }
+
+  .vc-why-mini b {
+    display: block;
+    margin-bottom: 7px;
+    color: #fff;
+    font-family: Manrope, Inter, sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+
+  .vc-why-mini p {
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.65;
+  }
+
+  .vc-why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .vc-why-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 250px;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.045)),
+      rgba(255, 255, 255, 0.04);
+    box-shadow: 0 24px 58px -44px rgba(0, 0, 0, 0.9);
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+  }
+
+  .vc-why-card::before {
+    content: "";
+    position: absolute;
+    right: -60px;
+    bottom: -70px;
+    width: 180px;
+    height: 180px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.23), transparent 68%);
+    pointer-events: none;
+  }
+
+  .vc-why-card.featured {
+    border-color: rgba(249, 115, 22, 0.34);
+    background:
+      radial-gradient(circle at top right, rgba(249, 115, 22, 0.18), transparent 42%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  }
+
+  .vc-why-card:hover,
+  .vc-why-card:focus-within {
+    border-color: rgba(249, 115, 22, 0.34);
+    background:
+      radial-gradient(circle at top right, rgba(249, 115, 22, 0.14), transparent 44%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06));
+    transform: translateY(-6px);
+  }
+
+  .vc-why-icon {
+    position: relative;
+    display: grid;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 22px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.09);
+    color: #fed7aa;
+  }
+
+  .vc-why-icon svg {
+    width: 27px;
+    height: 27px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .vc-why-card h3 {
+    position: relative;
+    margin: 0 0 11px;
+    color: #fff;
+    font-family: Manrope, Inter, sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.24;
+    letter-spacing: -0.018em;
+  }
+
+  .vc-why-card p {
+    position: relative;
+    margin: 0;
+    color: #aebfd4;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.7;
+  }
+
+  .vc-why-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 13px;
+    margin-top: 42px;
+  }
+
+  .vc-why-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 0 24px;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 900;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .vc-why-btn.primary {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    box-shadow: 0 24px 44px -24px rgba(249, 115, 22, 0.95);
+  }
+
+  .vc-why-btn.secondary {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+  }
+
+  .vc-why-btn:hover,
+  .vc-why-btn:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 1024px) {
+    .vc-why-head {
+      grid-template-columns: 1fr;
+    }
+
+    .vc-why-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .vc-why {
+      padding: 70px 16px;
+    }
+
+    .vc-why-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .vc-why-card {
+      min-height: auto;
+      padding: 22px;
+      border-radius: 24px;
+    }
+
+    .vc-why-actions {
+      display: grid;
+    }
+
+    .vc-why-btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<section class="vc-why">
+  <div class="vc-why-inner">
+    <div class="vc-why-head">
+      <div>
+        <span class="vc-why-kicker">Why choose Vibecano</span>
+        <h2 class="vc-why-title">Ready-made styles, custom ideas, and <span>clean print quality.</span></h2>
+        <p class="vc-why-sub">Vibecano is built for people who want good-looking apparel without confusion. Shop our ready-made designs, ask us to create a look, or customize your own product when you want full control.</p>
+      </div>
+
+      <div class="vc-why-mini">
+        <b>Designed around your vibe</b>
+        <p>Our focus is simple: strong designs, easy ordering, quality printing, and helpful support from idea to delivery.</p>
+      </div>
+    </div>
+
+    <div class="vc-why-grid">
+      <article class="vc-why-card featured">
+        <span class="vc-why-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="m4 15 4-4 4 4 3-3 5 5"/><circle cx="15.5" cy="8.5" r="1.5"/></svg>
+        </span>
+        <h3>Ready-made designs first</h3>
+        <p>Choose from Vibecano designs that are already prepared, styled, priced, and ready to order.</p>
+      </article>
+
+      <article class="vc-why-card featured">
+        <span class="vc-why-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </span>
+        <h3>We can design for you</h3>
+        <p>Share your idea, theme, logo, or text. We help turn it into a clean wearable design.</p>
+      </article>
+
+      <article class="vc-why-card">
+        <span class="vc-why-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M20 7 9 18l-5-5"/><path d="M4 7h10"/><path d="M4 12h6"/></svg>
+        </span>
+        <h3>Simple, clear ordering</h3>
+        <p>No complicated process. Select a design or product, confirm your details, and place your order.</p>
+      </article>
+
+      <article class="vc-why-card">
+        <span class="vc-why-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </span>
+        <h3>Prints made to last</h3>
+        <p>We focus on clean placement, sharp artwork, comfortable products, and colors that look good in real life.</p>
+      </article>
+
+      <article class="vc-why-card">
+        <span class="vc-why-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </span>
+        <h3>Fair transparent pricing</h3>
+        <p>Clear product pricing with no confusing hidden steps. You know what you are ordering before checkout.</p>
+      </article>
+
+      <article class="vc-why-card">
+        <span class="vc-why-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </span>
+        <h3>Friendly WhatsApp help</h3>
+        <p>Need help choosing or explaining your design idea? Message us and we will guide you.</p>
+      </article>
+    </div>
+
+    <div class="vc-why-actions">
+      <a class="vc-why-btn primary" href="/product-category/ready-made/">Shop Ready-Made</a>
+      <a class="vc-why-btn secondary" href="https://wa.me/923332929254" target="_blank" rel="noopener">Discuss a Design</a>
+    </div>
+  </div>
+</section>

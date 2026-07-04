@@ -1,19 +1,4 @@
-<!-- ============================================================
-     VIBECANO — CUSTOM SHOP PAGE, INLINE-SAFE VERSION
-     Paste into an Elementor HTML widget.
-
-     Important:
-     - This version uses inline styles so it still looks good if the
-       WooCommerce shop archive strips <style> or <script> tags.
-     - Best setup: create a normal Elementor page for your custom shop,
-       or use Elementor Theme Builder > Product Archive template.
-     - If you paste this into the native WooCommerce Shop page content and
-       the default products still appear below it, that is WooCommerce's
-       archive output. Hide it from the template/theme settings or use an
-       Elementor Product Archive template.
-     ============================================================ -->
-
-<section style="font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(180deg,#fff 0%,#f8fafc 100%);padding:42px 16px 70px;color:#0f172a;">
+<section id="vcCustomShop" style="width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(180deg,#fff 0%,#f8fafc 100%);padding:42px 16px 70px;color:#0f172a;">
   <div style="max-width:1280px;margin:0 auto;">
 
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;align-items:end;margin-bottom:24px;padding:clamp(24px,4vw,40px);border-radius:34px;background:radial-gradient(circle at top right,rgba(249,115,22,.22),transparent 35%),linear-gradient(135deg,#07111f 0%,#0f172a 52%,#172554 100%);color:#fff;box-shadow:0 30px 80px -58px rgba(15,23,42,.9);">
@@ -136,3 +121,34 @@
     </div>
   </div>
 </section>
+
+<script>
+(function () {
+  function hideWooDefaultShop() {
+    var selectors = [
+      ".woocommerce-products-header",
+      ".woocommerce-result-count",
+      ".woocommerce-ordering",
+      "ul.products",
+      "nav.woocommerce-pagination",
+      ".products",
+      ".page-title",
+      ".entry-title"
+    ];
+
+    selectors.forEach(function (selector) {
+      document.querySelectorAll(selector).forEach(function (element) {
+        if (!element.closest("#vcCustomShop")) {
+          element.style.display = "none";
+          element.setAttribute("aria-hidden", "true");
+        }
+      });
+    });
+  }
+
+  hideWooDefaultShop();
+  document.addEventListener("DOMContentLoaded", hideWooDefaultShop);
+  window.addEventListener("load", hideWooDefaultShop);
+  setTimeout(hideWooDefaultShop, 600);
+})();
+</script>

@@ -465,6 +465,7 @@
   var API = "/wp-json/wc/store/v1";
   var CHECKOUT = "/checkout/";
   var SHOP = "/shop/";
+  var CART_TOKEN_KEY = "vcWcCartToken";
   var root = document.getElementById("vcCartRoot");
   var toastEl = document.getElementById("vcCartToast");
   var countEl = document.getElementById("vcCartCount");
@@ -472,6 +473,34 @@
 
   if (!root || !toastEl || !window.fetch) {
     return;
+  }
+
+  function getStoredCartToken() {
+    try {
+      return sessionStorage.getItem(CART_TOKEN_KEY) || "";
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function storeCartToken(response) {
+    var token = response.headers.get("Cart-Token");
+    if (!token) return getStoredCartToken();
+    try {
+      sessionStorage.setItem(CART_TOKEN_KEY, token);
+    } catch (error) {}
+    return token;
+  }
+
+  function getCartHeaders() {
+    var headers = {
+      "Content-Type": "application/json",
+      "Nonce": nonce,
+      "X-WC-Store-API-Nonce": nonce
+    };
+    var token = getStoredCartToken();
+    if (token) headers["Cart-Token"] = token;
+    return headers;
   }
 
   function showToast(message) {
@@ -483,8 +512,13 @@
   }
 
   function fetchCart() {
-    return fetch(API + "/cart", { credentials: "include" }).then(function (response) {
+    var headers = {};
+    var token = getStoredCartToken();
+    if (token) headers["Cart-Token"] = token;
+
+    return fetch(API + "/cart", { credentials: "include", headers: headers }).then(function (response) {
       nonce = response.headers.get("Nonce") || response.headers.get("X-WC-Store-API-Nonce") || nonce;
+      storeCartToken(response);
       if (!response.ok) throw new Error("Cart request failed");
       return response.json();
     });
@@ -494,11 +528,7 @@
     return fetch(API + "/cart/update-item", {
       method: "POST",
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "Nonce": nonce,
-        "X-WC-Store-API-Nonce": nonce
-      },
+      headers: getCartHeaders(),
       body: JSON.stringify({ key: key, quantity: quantity })
     }).then(handleCartMutation);
   }
@@ -507,11 +537,7 @@
     return fetch(API + "/cart/remove-item", {
       method: "POST",
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "Nonce": nonce,
-        "X-WC-Store-API-Nonce": nonce
-      },
+      headers: getCartHeaders(),
       body: JSON.stringify({ key: key })
     }).then(handleCartMutation);
   }
@@ -520,17 +546,14 @@
     return fetch(API + "/cart/apply-coupon", {
       method: "POST",
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "Nonce": nonce,
-        "X-WC-Store-API-Nonce": nonce
-      },
+      headers: getCartHeaders(),
       body: JSON.stringify({ code: code })
     }).then(handleCartMutation);
   }
 
   function handleCartMutation(response) {
     nonce = response.headers.get("Nonce") || response.headers.get("X-WC-Store-API-Nonce") || nonce;
+    storeCartToken(response);
     return response.json().then(function (data) {
       if (!response.ok) {
         throw new Error(data && data.message ? data.message : "Cart update failed");

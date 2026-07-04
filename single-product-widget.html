@@ -782,6 +782,89 @@
   var selectedVariation = null;
   var selectedColor = "";
   var selectedSize = "";
+  var CART_TOKEN_KEY = "vcWcCartToken";
+
+  function getStoredCartToken() {
+    try {
+      return sessionStorage.getItem(CART_TOKEN_KEY) || "";
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function storeCartToken(response) {
+    var token = response.headers.get("Cart-Token");
+    if (!token) return getStoredCartToken();
+    try {
+      sessionStorage.setItem(CART_TOKEN_KEY, token);
+    } catch (error) {}
+    return token;
+  }
+
+  function getCartHeaders(nonce, token) {
+    var headers = {
+      "Content-Type": "application/json",
+      "Nonce": nonce,
+      "X-WC-Store-API-Nonce": nonce
+    };
+    token = token || getStoredCartToken();
+    if (token) headers["Cart-Token"] = token;
+    return headers;
+  }
+
+  function getDefaultAttributeValue(namePattern) {
+    var attributes = PRODUCT && Array.isArray(PRODUCT.attributes) ? PRODUCT.attributes : [];
+    var attribute = attributes.filter(function (item) {
+      return namePattern.test(item.name || "");
+    })[0];
+    var terms = attribute && Array.isArray(attribute.terms) ? attribute.terms : [];
+    if (!terms.length) return "";
+    var preferred = terms.filter(function (term) { return term && term.default; })[0];
+    return (preferred && preferred.name) || (terms[0] && terms[0].name) || "";
+  }
+
+  function getRequiredColorValue() {
+    if (selectedColor) return selectedColor;
+    return getDefaultAttributeValue(/colou?r/i);
+  }
+
+  function productHasColorAttribute() {
+    var attributes = PRODUCT && Array.isArray(PRODUCT.attributes) ? PRODUCT.attributes : [];
+    return attributes.some(function (attribute) {
+      return /colou?r/i.test(attribute.name || "");
+    });
+  }
+
+  function buildAddToCartPayload(quantity) {
+    var payload = { id: PRODUCT.id, quantity: quantity };
+    if (!VARIATIONS.length) return payload;
+
+    var variation = [];
+    if (selectedSize) {
+      variation.push({ attribute: "Size", value: selectedSize });
+    }
+    if (productHasColorAttribute()) {
+      variation.push({ attribute: "Color", value: getRequiredColorValue() || "Red" });
+    }
+    if (variation.length) payload.variation = variation;
+    return payload;
+  }
+
+  function buildClassicAddToCartUrl(quantity, destination) {
+    var params = new URLSearchParams();
+    params.set("add-to-cart", String(PRODUCT.id));
+    params.set("quantity", String(quantity));
+    if (selectedVariation && selectedVariation.id) {
+      params.set("variation_id", String(selectedVariation.id));
+    }
+    if (selectedSize) {
+      params.set("attribute_size", selectedSize);
+    }
+    if (productHasColorAttribute()) {
+      params.set("attribute_color", getRequiredColorValue() || "Red");
+    }
+    return (destination || "/checkout/") + "?" + params.toString();
+  }
 
   function getProductSlug() {
     var parts = window.location.pathname.split("/").filter(Boolean);
@@ -1211,28 +1294,32 @@
     var button = document.getElementById("vcSpMainBtn");
     var oldText = button.textContent;
     var quantity = Number.parseInt(document.getElementById("vcSpQty").value, 10) || 1;
-    var productId = selectedVariation && selectedVariation.id ? selectedVariation.id : PRODUCT.id;
+    var cartToken = "";
+    var nonce = "";
 
     button.disabled = true;
     button.textContent = "Adding...";
 
-    fetch(API + "/cart", { credentials: "include" })
+    fetch(API + "/cart", {
+      credentials: "include",
+      headers: getStoredCartToken() ? { "Cart-Token": getStoredCartToken() } : {}
+    })
       .then(function (response) {
-        var nonce = response.headers.get("Nonce") || response.headers.get("X-WC-Store-API-Nonce") || "";
+        nonce = response.headers.get("Nonce") || response.headers.get("X-WC-Store-API-Nonce") || "";
+        cartToken = storeCartToken(response);
         return fetch(API + "/cart/add-item", {
           method: "POST",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            "Nonce": nonce,
-            "X-WC-Store-API-Nonce": nonce
-          },
-          body: JSON.stringify({ id: productId, quantity: quantity })
+          headers: getCartHeaders(nonce, cartToken),
+          body: JSON.stringify(buildAddToCartPayload(quantity))
         });
       })
       .then(function (response) {
+        storeCartToken(response);
+        nonce = response.headers.get("Nonce") || response.headers.get("X-WC-Store-API-Nonce") || nonce;
         return response.json().then(function (data) {
           if (!response.ok) throw new Error(data && data.message ? data.message : "Add to cart failed");
+          if (!data.items || !data.items.length) throw new Error("Product was not added to cart");
           return data;
         });
       })
@@ -1241,13 +1328,10 @@
         window.location.href = "/checkout/";
       })
       .catch(function (error) {
-        if (productId !== PRODUCT.id) {
-          window.location.href = "/checkout/?add-to-cart=" + encodeURIComponent(productId) + "&quantity=" + encodeURIComponent(quantity);
-          return;
-        }
-        showToast(error.message || "Could not add this product to cart");
+        window.location.href = buildClassicAddToCartUrl(quantity, "/checkout/");
       })
       .finally(function () {
+        if (!button.disabled) return;
         button.disabled = false;
         button.textContent = oldText;
       });

@@ -780,6 +780,7 @@
   var API = "/wp-json/wc/store/v1";
   var SHOP = "/shop/";
   var WHATSAPP = "923332929254";
+  var CART_TOKEN_KEY = "vcWcCartToken";
   var SHIPPING_NORMAL = 300;
   var SHIPPING_URGENT = 500;
   var FREE_SHIPPING_MIN = 5000;
@@ -820,9 +821,42 @@
     setTimeout(function () { toast.classList.remove("is-showing"); }, 2600);
   }
 
+  function getStoredCartToken() {
+    try {
+      return sessionStorage.getItem(CART_TOKEN_KEY) || "";
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function storeCartToken(response) {
+    var token = response.headers.get("Cart-Token");
+    if (!token) return getStoredCartToken();
+    try {
+      sessionStorage.setItem(CART_TOKEN_KEY, token);
+    } catch (error) {}
+    return token;
+  }
+
+  function getCartHeaders() {
+    var headers = {
+      "Content-Type": "application/json",
+      "Nonce": nonce,
+      "X-WC-Store-API-Nonce": nonce
+    };
+    var token = getStoredCartToken();
+    if (token) headers["Cart-Token"] = token;
+    return headers;
+  }
+
   function fetchCart() {
-    return fetch(API + "/cart", { credentials: "include" }).then(function (response) {
+    var headers = {};
+    var token = getStoredCartToken();
+    if (token) headers["Cart-Token"] = token;
+
+    return fetch(API + "/cart", { credentials: "include", headers: headers }).then(function (response) {
       nonce = response.headers.get("Nonce") || response.headers.get("X-WC-Store-API-Nonce") || nonce;
+      storeCartToken(response);
       if (!response.ok) throw new Error("Cart request failed");
       return response.json();
     });
@@ -1035,11 +1069,7 @@
     fetch(API + "/checkout", {
       method: "POST",
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "Nonce": nonce,
-        "X-WC-Store-API-Nonce": nonce
-      },
+      headers: getCartHeaders(),
       body: JSON.stringify({
         billing_address: {
           first_name: $("#vcFn").value,

@@ -920,10 +920,10 @@
   function isCustomItem(item) {
     var id = Number(item.id || item.product_id || 0);
     var name = String(item.name || "").toLowerCase();
-    var hasCustomData = (item.item_data && item.item_data.length) || (item.variation && item.variation.length);
+    var slug = String(item.permalink || item.slug || "").toLowerCase();
     return CUSTOM_PRODUCT_IDS.indexOf(id) >= 0 ||
-      /plain red|lightweight short sleeve|custom/i.test(name) ||
-      !!hasCustomData;
+      /plain red t-shirt|lightweight short sleeve t-shirt/i.test(name) ||
+      /plain-red-t-shirt|lightweight-short-sleeve-t-shirt/i.test(slug);
   }
 
   function rawFromRupees(amount) {

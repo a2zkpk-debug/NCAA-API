@@ -381,6 +381,75 @@
     animation: vc-rm-shimmer 1.35s linear infinite;
   }
 
+  .vc-rm-shop-cta {
+    position: relative;
+    overflow: hidden;
+    margin-top: 26px;
+    padding: 22px;
+    border: 1px solid rgba(249, 115, 22, 0.24);
+    border-radius: 24px;
+    background:
+      radial-gradient(circle at left, rgba(249, 115, 22, 0.18), transparent 34%),
+      linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(79, 70, 229, 0.92));
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 22px 48px -30px rgba(15, 23, 42, 0.9);
+  }
+
+  .vc-rm-shop-cta::after {
+    content: "";
+    position: absolute;
+    inset: -60% auto auto 50%;
+    width: 260px;
+    height: 260px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .vc-rm-shop-cta strong {
+    position: relative;
+    display: block;
+    margin-bottom: 6px;
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 950;
+    letter-spacing: -0.03em;
+  }
+
+  .vc-rm-shop-cta span {
+    position: relative;
+    display: block;
+    max-width: 620px;
+    margin: 0 auto 16px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 14px;
+    font-weight: 650;
+    line-height: 1.6;
+  }
+
+  .vc-rm-shop-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 22px;
+    border-radius: 999px;
+    background: #fff;
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 950;
+    text-decoration: none;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .vc-rm-shop-btn:hover,
+  .vc-rm-shop-btn:focus-visible {
+    box-shadow: 0 18px 28px -22px rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+  }
+
   @keyframes vc-rm-shimmer {
     to { background-position: -220% 0; }
   }
@@ -427,6 +496,11 @@
     </div>
 
     <div id="vcRmGrid" class="vc-rm-grid" aria-live="polite"></div>
+    <div class="vc-rm-shop-cta">
+      <strong>Want to explore more designs?</strong>
+      <span>We show only the top 8 here. Visit the shop to discover more products, styles, and fresh drops.</span>
+      <a class="vc-rm-shop-btn" href="/shop/">Go to Shop</a>
+    </div>
   </div>
 </section>
 
@@ -445,7 +519,7 @@
       { slug: "all", label: "All Ready-Made" }
     ],
 
-    perPage: 12,
+    perPage: 8,
     endpoints: {
       products: "/wp-json/wc/store/v1/products",
       categories: "/wp-json/wc/store/v1/products/categories",

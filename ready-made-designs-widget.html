@@ -245,22 +245,6 @@
     transform: scale(1.07);
   }
 
-  .vc-rm-corner {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    z-index: 2;
-    padding: 6px 10px;
-    border-radius: 999px;
-    background: rgba(15, 23, 42, 0.84);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    backdrop-filter: blur(8px);
-  }
-
   .vc-rm-body {
     display: flex;
     flex: 1;
@@ -268,20 +252,11 @@
     padding: 15px;
   }
 
-  .vc-rm-cat {
-    margin-bottom: 6px;
-    color: var(--vc-rm-primary);
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
   .vc-rm-name {
     display: -webkit-box;
     overflow: hidden;
-    min-height: 42px;
-    margin: 0 0 10px;
+    min-height: 41px;
+    margin: 0 0 8px;
     color: var(--vc-rm-text);
     font-size: 15px;
     font-weight: 850;
@@ -294,6 +269,19 @@
   .vc-rm-name:hover,
   .vc-rm-name:focus-visible {
     color: var(--vc-rm-primary);
+  }
+
+  .vc-rm-desc {
+    display: -webkit-box;
+    overflow: hidden;
+    min-height: 42px;
+    margin: 0 0 12px;
+    color: var(--vc-rm-muted);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.55;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   .vc-rm-price {
@@ -665,7 +653,7 @@
 
   function renderProductCard(product) {
     var image = getProductImage(product);
-    var categoryName = getProductCategoryName(product);
+    var description = getProductDescription(product);
     var productUrl = escapeAttr(product.permalink || "#");
     var productName = escapeHtml(product.name || "Product");
     var addUrl = "/?add-to-cart=" + encodeURIComponent(product.id || "");
@@ -674,14 +662,13 @@
     return [
       '<article class="vc-rm-card">',
         '<div class="vc-rm-img">',
-          '<span class="vc-rm-corner">Ready Made</span>',
           '<a href="' + productUrl + '" aria-label="View ' + escapeAttr(product.name || "product") + '">',
             image ? '<img src="' + escapeAttr(image.src) + '" alt="' + escapeAttr(image.alt || product.name || "Ready-made product") + '" loading="lazy" decoding="async">' : "",
           '</a>',
         '</div>',
         '<div class="vc-rm-body">',
-          '<div class="vc-rm-cat">' + escapeHtml(categoryName || "Ready-Made") + '</div>',
           '<a class="vc-rm-name" href="' + productUrl + '">' + productName + '</a>',
+          description ? '<p class="vc-rm-desc">' + escapeHtml(description) + '</p>' : '',
           '<div class="vc-rm-price">' + formatPrice(product.prices) + '</div>',
           '<div class="vc-rm-btns">',
             '<a class="vc-rm-btn cart" href="' + escapeAttr(addUrl) + '">Add to Cart</a>',
@@ -696,13 +683,15 @@
     return product && product.images && product.images.length ? product.images[0] : null;
   }
 
-  function getProductCategoryName(product) {
-    var categories = product && Array.isArray(product.categories) ? product.categories : [];
-    var matched = categories.filter(function (category) {
-      return category && category.slug && category.slug !== CONFIG.requiredCategorySlug;
-    })[0];
+  function getProductDescription(product) {
+    var text = stripHtml((product && product.short_description) || (product && product.description) || "");
+    var maxLength = 120;
 
-    return (matched || categories[0] || {}).name || "";
+    if (text.length <= maxLength) {
+      return text;
+    }
+
+    return text.slice(0, maxLength).replace(/\s+\S*$/, "") + "...";
   }
 
   function productMatchesRequiredTerms(product) {
@@ -773,6 +762,13 @@
         "'": "&#39;"
       }[character];
     });
+  }
+
+  function stripHtml(value) {
+    var node = document.createElement("div");
+    node.innerHTML = String(value || "");
+
+    return (node.textContent || node.innerText || "").replace(/\s+/g, " ").trim();
   }
 
   function escapeAttr(value) {

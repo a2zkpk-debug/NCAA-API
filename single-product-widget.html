@@ -1238,11 +1238,11 @@
       })
       .then(function () {
         document.body.dispatchEvent(new CustomEvent("wc-blocks_added_to_cart"));
-        showAddedModal(quantity);
+        window.location.href = "/checkout/";
       })
       .catch(function (error) {
         if (productId !== PRODUCT.id) {
-          window.location.href = "/?add-to-cart=" + encodeURIComponent(productId) + "&quantity=" + encodeURIComponent(quantity);
+          window.location.href = "/checkout/?add-to-cart=" + encodeURIComponent(productId) + "&quantity=" + encodeURIComponent(quantity);
           return;
         }
         showToast(error.message || "Could not add this product to cart");

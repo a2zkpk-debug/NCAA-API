@@ -521,12 +521,46 @@
   init();
 
   function init() {
-    renderChips();
     sortEl.addEventListener("change", function () {
       state.sort = sortEl.value;
       loadProducts();
     });
-    loadProducts();
+    setupCategoryChips().then(loadProducts).catch(function () {
+      renderChips();
+      loadProducts();
+    });
+  }
+
+  function setupCategoryChips() {
+    return fetch(CONFIG.endpoints.categories + "?per_page=100", { credentials: "same-origin" })
+      .then(checkResponse)
+      .then(function (categories) {
+        var parentCategory = findBySlug(categories, CONFIG.requiredCategorySlug);
+        var childCategories;
+
+        if (!parentCategory || !parentCategory.id) {
+          renderChips();
+          return;
+        }
+
+        taxonomyCache.category[CONFIG.requiredCategorySlug] = Number(parentCategory.id);
+        childCategories = categories.filter(function (category) {
+          return category && Number(category.parent) === Number(parentCategory.id);
+        });
+
+        childCategories.forEach(function (category) {
+          taxonomyCache.category[category.slug] = Number(category.id);
+        });
+
+        CONFIG.filterChips = [CONFIG.filterChips[0]].concat(childCategories.map(function (category) {
+          return {
+            slug: category.slug,
+            label: category.name
+          };
+        }));
+
+        renderChips();
+      });
   }
 
   function renderChips() {
@@ -616,12 +650,8 @@
   }
 
   function fetchProducts(requiredCategoryId, requiredTagId, chipCategoryId) {
-    var categoryIds = [requiredCategoryId];
+    var categoryIds = chipCategoryId ? [chipCategoryId] : [requiredCategoryId];
     var cacheKey;
-
-    if (chipCategoryId && chipCategoryId !== requiredCategoryId) {
-      categoryIds.push(chipCategoryId);
-    }
 
     cacheKey = categoryIds.join(",") + "|tag:" + requiredTagId + "|sort:" + state.sort;
     if (cache[cacheKey]) {

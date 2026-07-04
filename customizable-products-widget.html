@@ -1,0 +1,754 @@
+<!-- ============================================================
+     VIBECANO — CUSTOMIZABLE PRODUCTS WIDGET
+     Paste this whole file into an Elementor HTML widget.
+
+     Products are fetched from WooCommerce only with:
+     - category slug: customize
+     - tag slug: customizable
+     ============================================================ -->
+<style>
+  :root {
+    --vc-cu-card: rgba(255, 255, 255, 0.92);
+    --vc-cu-text: #0f172a;
+    --vc-cu-muted: #64748b;
+    --vc-cu-line: rgba(148, 163, 184, 0.28);
+    --vc-cu-primary: #2563eb;
+    --vc-cu-primary-dark: #1d4ed8;
+    --vc-cu-accent: #06b6d4;
+    --vc-cu-shadow: 0 22px 60px -28px rgba(15, 23, 42, 0.45);
+  }
+
+  .vc-cu-wrap {
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 44px 20px;
+    color: var(--vc-cu-text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  .vc-cu-shell {
+    position: relative;
+    overflow: hidden;
+    padding: 30px;
+    border: 1px solid var(--vc-cu-line);
+    border-radius: 30px;
+    background:
+      radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 36%),
+      radial-gradient(circle at top right, rgba(6, 182, 212, 0.14), transparent 32%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.8));
+    box-shadow: var(--vc-cu-shadow);
+    isolation: isolate;
+  }
+
+  .vc-cu-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: linear-gradient(to bottom, black, transparent 70%);
+  }
+
+  .vc-cu-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .vc-cu-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 7px 12px;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    border-radius: 999px;
+    background: rgba(219, 234, 254, 0.9);
+    color: #1e40af;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .vc-cu-kicker::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--vc-cu-primary);
+    box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.12);
+  }
+
+  .vc-cu-title {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+
+  .vc-cu-sub {
+    max-width: 620px;
+    margin: 10px 0 0;
+    color: var(--vc-cu-muted);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .vc-cu-viewall {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--vc-cu-primary);
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 12px 30px -22px rgba(37, 99, 235, 0.8);
+    transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .vc-cu-viewall:hover,
+  .vc-cu-viewall:focus-visible {
+    border-color: rgba(37, 99, 235, 0.45);
+    color: var(--vc-cu-primary-dark);
+    transform: translateY(-1px);
+  }
+
+  .vc-cu-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 22px;
+    padding: 10px;
+    border: 1px solid rgba(226, 232, 240, 0.82);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(14px);
+  }
+
+  .vc-cu-chips {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .vc-cu-chip {
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 9px 14px;
+    background: transparent;
+    color: var(--vc-cu-muted);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  }
+
+  .vc-cu-chip:hover,
+  .vc-cu-chip:focus-visible {
+    border-color: rgba(37, 99, 235, 0.18);
+    background: rgba(37, 99, 235, 0.08);
+    color: var(--vc-cu-primary);
+  }
+
+  .vc-cu-chip.is-active {
+    border-color: var(--vc-cu-primary);
+    background: var(--vc-cu-primary);
+    color: #fff;
+    box-shadow: 0 12px 22px -16px rgba(37, 99, 235, 0.95);
+  }
+
+  .vc-cu-sort {
+    width: auto;
+    min-width: 168px;
+    max-width: 210px;
+    padding: 9px 36px 9px 12px;
+    border: 1px solid rgba(226, 232, 240, 0.96);
+    border-radius: 14px;
+    background:
+      #fff
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path fill='%2364748b' d='M1.41.59 6 5.17 10.59.59 12 2l-6 6-6-6z'/></svg>")
+      no-repeat right 13px center;
+    color: var(--vc-cu-text);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .vc-cu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .vc-cu-card {
+    display: flex;
+    overflow: hidden;
+    min-width: 0;
+    border: 1px solid rgba(226, 232, 240, 0.86);
+    border-radius: 24px;
+    background: var(--vc-cu-card);
+    box-shadow: 0 16px 40px -32px rgba(15, 23, 42, 0.85);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    flex-direction: column;
+  }
+
+  .vc-cu-card:hover {
+    border-color: rgba(37, 99, 235, 0.28);
+    box-shadow: 0 24px 60px -34px rgba(15, 23, 42, 0.95);
+    transform: translateY(-5px);
+  }
+
+  .vc-cu-img {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    background:
+      linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(6, 182, 212, 0.08)),
+      #f1f5f9;
+  }
+
+  .vc-cu-img img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.45s ease, filter 0.45s ease;
+  }
+
+  .vc-cu-card:hover .vc-cu-img img {
+    filter: saturate(1.08);
+    transform: scale(1.07);
+  }
+
+  .vc-cu-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .vc-cu-name {
+    display: -webkit-box;
+    overflow: hidden;
+    min-height: 41px;
+    margin: 0 0 8px;
+    color: var(--vc-cu-text);
+    font-size: 15px;
+    font-weight: 850;
+    line-height: 1.38;
+    text-decoration: none;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .vc-cu-name:hover,
+  .vc-cu-name:focus-visible {
+    color: var(--vc-cu-primary);
+  }
+
+  .vc-cu-desc {
+    display: -webkit-box;
+    overflow: hidden;
+    min-height: 42px;
+    margin: 0 0 12px;
+    color: var(--vc-cu-muted);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.55;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .vc-cu-price {
+    margin-bottom: 13px;
+    color: var(--vc-cu-text);
+    font-size: 18px;
+    font-weight: 950;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .vc-cu-price del {
+    margin-right: 7px;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .vc-cu-btns {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: auto;
+  }
+
+  .vc-cu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px 12px;
+    border: 0;
+    border-radius: 13px;
+    background: linear-gradient(135deg, var(--vc-cu-primary), var(--vc-cu-accent));
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+  }
+
+  .vc-cu-btn:hover,
+  .vc-cu-btn:focus-visible {
+    filter: saturate(1.08);
+    box-shadow: 0 14px 24px -18px rgba(37, 99, 235, 0.9);
+    transform: translateY(-1px);
+  }
+
+  .vc-cu-message {
+    grid-column: 1 / -1;
+    padding: 36px 18px;
+    border: 1px dashed rgba(148, 163, 184, 0.55);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--vc-cu-muted);
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .vc-cu-message strong {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--vc-cu-text);
+    font-size: 16px;
+  }
+
+  .vc-cu-skeleton {
+    overflow: hidden;
+    min-height: 344px;
+    border-radius: 24px;
+    background:
+      linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.78), transparent),
+      rgba(226, 232, 240, 0.65);
+    background-size: 220% 100%;
+    animation: vc-cu-shimmer 1.35s linear infinite;
+  }
+
+  @keyframes vc-cu-shimmer {
+    to { background-position: -220% 0; }
+  }
+
+  @media (max-width: 1100px) {
+    .vc-cu-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 800px) {
+    .vc-cu-wrap { padding: 28px 14px; }
+    .vc-cu-shell { padding: 22px; border-radius: 24px; }
+    .vc-cu-head { align-items: flex-start; flex-direction: column; }
+    .vc-cu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .vc-cu-toolbar { align-items: stretch; flex-direction: column; }
+    .vc-cu-sort { max-width: none; width: 100%; }
+  }
+
+  @media (max-width: 480px) {
+    .vc-cu-shell { padding: 18px; }
+    .vc-cu-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<section class="vc-cu-wrap" aria-labelledby="vcCuTitle">
+  <div class="vc-cu-shell">
+    <div class="vc-cu-head">
+      <div>
+        <span class="vc-cu-kicker">Designer tool</span>
+        <h2 class="vc-cu-title" id="vcCuTitle">Customize Your Own</h2>
+        <p class="vc-cu-sub">Choose a product, then add your text, logo, or image with the live designer.</p>
+      </div>
+      <a class="vc-cu-viewall" href="/product-category/customize/">View all customizable</a>
+    </div>
+
+    <div class="vc-cu-toolbar" aria-label="Customizable product controls">
+      <div class="vc-cu-chips" id="vcCuChips" role="list"></div>
+      <select class="vc-cu-sort" id="vcCuSort" aria-label="Sort customizable products">
+        <option value="popularity">Most Popular</option>
+        <option value="date">Newest</option>
+        <option value="price">Price Low to High</option>
+        <option value="price-desc">Price High to Low</option>
+      </select>
+    </div>
+
+    <div id="vcCuGrid" class="vc-cu-grid" aria-live="polite"></div>
+  </div>
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  var CONFIG = {
+    requiredCategorySlug: "customize",
+    requiredTagSlug: "customizable",
+    filterChips: [
+      { slug: "all", label: "All Customizable" }
+    ],
+    perPage: 12,
+    endpoints: {
+      products: "/wp-json/wc/store/v1/products",
+      categories: "/wp-json/wc/store/v1/products/categories",
+      tags: "/wp-json/wc/store/v1/products/tags"
+    }
+  };
+
+  var state = {
+    activeChip: CONFIG.filterChips[0].slug,
+    sort: "popularity"
+  };
+
+  var cache = Object.create(null);
+  var taxonomyCache = {
+    category: Object.create(null),
+    tag: Object.create(null)
+  };
+
+  var chipsEl = document.getElementById("vcCuChips");
+  var gridEl = document.getElementById("vcCuGrid");
+  var sortEl = document.getElementById("vcCuSort");
+
+  if (!chipsEl || !gridEl || !sortEl || !window.fetch) {
+    return;
+  }
+
+  init();
+
+  function init() {
+    renderChips();
+    sortEl.addEventListener("change", function () {
+      state.sort = sortEl.value;
+      loadProducts();
+    });
+    loadProducts();
+  }
+
+  function renderChips() {
+    chipsEl.innerHTML = "";
+
+    CONFIG.filterChips.forEach(function (chip, index) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "vc-cu-chip" + (index === 0 ? " is-active" : "");
+      button.textContent = chip.label;
+      button.setAttribute("aria-pressed", index === 0 ? "true" : "false");
+      button.dataset.slug = chip.slug;
+
+      button.addEventListener("click", function () {
+        if (state.activeChip === chip.slug) {
+          return;
+        }
+
+        state.activeChip = chip.slug;
+        Array.prototype.forEach.call(chipsEl.children, function (child) {
+          child.classList.toggle("is-active", child.dataset.slug === chip.slug);
+          child.setAttribute("aria-pressed", child.dataset.slug === chip.slug ? "true" : "false");
+        });
+        loadProducts();
+      });
+
+      chipsEl.appendChild(button);
+    });
+  }
+
+  function loadProducts() {
+    renderLoading();
+
+    Promise.all([
+      resolveTaxonomyId("category", CONFIG.requiredCategorySlug),
+      resolveTaxonomyId("tag", CONFIG.requiredTagSlug),
+      state.activeChip === "all" ? Promise.resolve(0) : resolveTaxonomyId("category", state.activeChip)
+    ])
+      .then(function (ids) {
+        var requiredCategoryId = ids[0];
+        var requiredTagId = ids[1];
+        var chipCategoryId = ids[2];
+
+        if (!requiredCategoryId || !requiredTagId || (state.activeChip !== "all" && !chipCategoryId)) {
+          renderMessage(
+            "No matching taxonomy found",
+            "Please check that the WooCommerce category and tag slugs in CONFIG are correct."
+          );
+          return [];
+        }
+
+        return fetchProducts(requiredCategoryId, requiredTagId, chipCategoryId);
+      })
+      .then(function (products) {
+        if (Array.isArray(products)) {
+          renderProducts(products);
+        }
+      })
+      .catch(function () {
+        renderMessage(
+          "Products could not be loaded",
+          "Please refresh the page or check that the WooCommerce Store API is enabled."
+        );
+      });
+  }
+
+  function resolveTaxonomyId(type, slug) {
+    var endpoint = type === "tag" ? CONFIG.endpoints.tags : CONFIG.endpoints.categories;
+    var bucket = taxonomyCache[type];
+
+    if (bucket[slug] !== undefined) {
+      return Promise.resolve(bucket[slug]);
+    }
+
+    return fetch(endpoint + "?per_page=100", { credentials: "same-origin" })
+      .then(checkResponse)
+      .then(function (items) {
+        var match = findBySlug(items, slug);
+        var id = match && match.id ? Number(match.id) : 0;
+        bucket[slug] = id;
+        return id;
+      })
+      .catch(function () {
+        bucket[slug] = 0;
+        return 0;
+      });
+  }
+
+  function fetchProducts(requiredCategoryId, requiredTagId, chipCategoryId) {
+    var categoryIds = [requiredCategoryId];
+    var cacheKey;
+
+    if (chipCategoryId && chipCategoryId !== requiredCategoryId) {
+      categoryIds.push(chipCategoryId);
+    }
+
+    cacheKey = categoryIds.join(",") + "|tag:" + requiredTagId + "|sort:" + state.sort;
+    if (cache[cacheKey]) {
+      return Promise.resolve(cache[cacheKey]);
+    }
+
+    return fetch(buildProductsUrl(categoryIds, requiredTagId), { credentials: "same-origin" })
+      .then(checkResponse)
+      .then(function (products) {
+        var safeProducts = Array.isArray(products) ? products.filter(productMatchesRequiredTerms) : [];
+        cache[cacheKey] = safeProducts;
+        return safeProducts;
+      });
+  }
+
+  function buildProductsUrl(categoryIds, tagId) {
+    var params = new URLSearchParams();
+    params.set("per_page", String(CONFIG.perPage));
+    params.set("category", categoryIds.join(","));
+    params.set("tag", String(tagId));
+
+    if (state.sort === "price" || state.sort === "price-desc") {
+      params.set("orderby", "price");
+      params.set("order", state.sort === "price-desc" ? "desc" : "asc");
+    } else if (state.sort === "date") {
+      params.set("orderby", "date");
+      params.set("order", "desc");
+    } else {
+      params.set("orderby", "popularity");
+      params.set("order", "desc");
+    }
+
+    return CONFIG.endpoints.products + "?" + params.toString();
+  }
+
+  function checkResponse(response) {
+    if (!response.ok) {
+      throw new Error("WooCommerce Store API request failed: " + response.status);
+    }
+    return response.json();
+  }
+
+  function findBySlug(items, slug) {
+    if (!Array.isArray(items)) {
+      return null;
+    }
+
+    return items.filter(function (item) {
+      return item && item.slug === slug;
+    })[0] || null;
+  }
+
+  function renderLoading() {
+    gridEl.innerHTML = "";
+
+    for (var i = 0; i < Math.min(CONFIG.perPage, 8); i += 1) {
+      var skeleton = document.createElement("div");
+      skeleton.className = "vc-cu-skeleton";
+      skeleton.setAttribute("aria-hidden", "true");
+      gridEl.appendChild(skeleton);
+    }
+  }
+
+  function renderProducts(products) {
+    if (!products.length) {
+      renderMessage(
+        "No customizable products found",
+        "Add products to the customize category and apply the customizable tag to show them here."
+      );
+      return;
+    }
+
+    gridEl.innerHTML = products.map(renderProductCard).join("");
+  }
+
+  function renderProductCard(product) {
+    var image = getProductImage(product);
+    var description = getProductDescription(product);
+    var productUrl = escapeAttr(product.permalink || "#");
+    var productName = escapeHtml(product.name || "Product");
+    var customizeUrl = buildCustomizeUrl(product);
+
+    return [
+      '<article class="vc-cu-card">',
+        '<div class="vc-cu-img">',
+          '<a href="' + productUrl + '" aria-label="View ' + escapeAttr(product.name || "product") + '">',
+            image ? '<img src="' + escapeAttr(image.src) + '" alt="' + escapeAttr(image.alt || product.name || "Customizable product") + '" loading="lazy" decoding="async">' : "",
+          '</a>',
+        '</div>',
+        '<div class="vc-cu-body">',
+          '<a class="vc-cu-name" href="' + productUrl + '">' + productName + '</a>',
+          description ? '<p class="vc-cu-desc">' + escapeHtml(description) + '</p>' : '',
+          '<div class="vc-cu-price">' + formatPrice(product.prices) + '</div>',
+          '<div class="vc-cu-btns">',
+            '<a class="vc-cu-btn" href="' + escapeAttr(customizeUrl) + '">Customize Now</a>',
+          '</div>',
+        '</div>',
+      '</article>'
+    ].join("");
+  }
+
+  function getProductImage(product) {
+    return product && product.images && product.images.length ? product.images[0] : null;
+  }
+
+  function getProductDescription(product) {
+    var text = stripHtml((product && product.short_description) || (product && product.description) || "");
+    var maxLength = 120;
+
+    if (text.length <= maxLength) {
+      return text;
+    }
+
+    return text.slice(0, maxLength).replace(/\s+\S*$/, "") + "...";
+  }
+
+  function buildCustomizeUrl(product) {
+    var baseUrl = product && product.permalink ? product.permalink : "#";
+    var separator = baseUrl.indexOf("?") === -1 ? "?" : "&";
+
+    return baseUrl + separator + "customize=1&product_cms=" + encodeURIComponent(product && product.id ? product.id : "");
+  }
+
+  function productMatchesRequiredTerms(product) {
+    var matchesRequiredTag = productHasTerm(product, "tags", CONFIG.requiredTagSlug);
+    var matchesChipCategory = state.activeChip === "all" || productHasTerm(product, "categories", state.activeChip);
+
+    return matchesRequiredTag && matchesChipCategory;
+  }
+
+  function productHasTerm(product, key, slug) {
+    var terms = product && Array.isArray(product[key]) ? product[key] : [];
+
+    return terms.some(function (term) {
+      return term && term.slug === slug;
+    });
+  }
+
+  function formatPrice(prices) {
+    var currentPrice = prices && prices.price;
+    var regularPrice = prices && prices.regular_price;
+    var salePrice = prices && prices.sale_price;
+
+    if (!currentPrice) {
+      return "";
+    }
+
+    if (regularPrice && salePrice && regularPrice !== salePrice) {
+      return "<del>" + escapeHtml(formatMoney(prices, regularPrice)) + "</del>" + escapeHtml(formatMoney(prices, salePrice));
+    }
+
+    return escapeHtml(formatMoney(prices, currentPrice));
+  }
+
+  function formatMoney(prices, value) {
+    var minorUnit = Number(prices.currency_minor_unit);
+    var decimals = Number.isFinite(minorUnit) ? minorUnit : 2;
+    var amount = Number.parseInt(value, 10);
+    var symbol = prices.currency_prefix || prices.currency_symbol || "";
+    var suffix = prices.currency_suffix || "";
+    var decimalSeparator = prices.currency_decimal_separator || ".";
+    var thousandSeparator = prices.currency_thousand_separator || ",";
+    var numberString;
+    var parts;
+
+    if (!Number.isFinite(amount)) {
+      return "";
+    }
+
+    numberString = (amount / Math.pow(10, decimals)).toFixed(decimals);
+    parts = numberString.split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandSeparator);
+
+    return symbol + parts.join(decimalSeparator) + suffix;
+  }
+
+  function renderMessage(title, body) {
+    gridEl.innerHTML = '<div class="vc-cu-message"><strong>' + escapeHtml(title) + '</strong>' + escapeHtml(body) + '</div>';
+  }
+
+  function escapeHtml(value) {
+    return String(value || "").replace(/[&<>"']/g, function (character) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[character];
+    });
+  }
+
+  function stripHtml(value) {
+    var node = document.createElement("div");
+    node.innerHTML = String(value || "");
+
+    return (node.textContent || node.innerText || "").replace(/\s+/g, " ").trim();
+  }
+
+  function escapeAttr(value) {
+    return escapeHtml(value).replace(/`/g, "&#96;");
+  }
+})();
+</script>

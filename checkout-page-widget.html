@@ -555,7 +555,7 @@
   }
 </style>
 
-<section class="vc-checkout">
+<section class="vc-checkout" id="vcCheckoutSection">
   <div class="vc-checkout-inner">
     <div class="vc-checkout-hero">
       <div>
@@ -696,6 +696,22 @@
   var nonce = "";
   var receipt = null;
   var currency = { prefix: "Rs ", suffix: "", minor: 0 };
+
+  function fitCheckoutToViewport() {
+    var section = document.getElementById("vcCheckoutSection");
+    if (!section) return;
+
+    section.style.width = "";
+    section.style.marginLeft = "";
+    section.style.marginRight = "";
+
+    var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+    var leftOffset = section.getBoundingClientRect().left;
+
+    section.style.width = viewportWidth + "px";
+    section.style.marginLeft = (-leftOffset) + "px";
+    section.style.marginRight = "0";
+  }
 
   function $(selector, root) {
     return (root || document).querySelector(selector);
@@ -942,6 +958,8 @@
   }
 
   setupPayments();
+  fitCheckoutToViewport();
+  window.addEventListener("resize", fitCheckoutToViewport);
   $("#vcPlaceOrder").addEventListener("click", placeOrder);
   fetchCart()
     .then(function (data) {

@@ -778,6 +778,7 @@
   var IS_CUSTOM = false;
   var VARIATIONS = [];
   var VARIATION_BY_SIZE = {};
+  var COLOR_VARIES = false;
   var selectedVariation = null;
   var selectedColor = "";
   var selectedSize = "";
@@ -853,6 +854,7 @@
     if (!variations.length) {
       VARIATIONS = [];
       VARIATION_BY_SIZE = {};
+      COLOR_VARIES = false;
       selectedVariation = null;
       return Promise.resolve();
     }
@@ -867,18 +869,28 @@
           return details;
         })
         .catch(function () {
+          variation.__attributes = variation.attributes || [];
           return variation;
         });
     })).then(function (details) {
       VARIATIONS = details;
-      VARIATION_BY_SIZE = {};
-      VARIATIONS.forEach(function (variation) {
-        var size = getVariationSize(variation);
-        if (size) {
-          VARIATION_BY_SIZE[normalizeOption(size)] = variation;
-        }
-      });
+      buildVariationMaps();
       selectedVariation = null;
+    });
+  }
+
+  function buildVariationMaps() {
+    VARIATION_BY_SIZE = {};
+    COLOR_VARIES = false;
+
+    VARIATIONS.forEach(function (variation) {
+      var size = getVariationSize(variation);
+      if (size) {
+        VARIATION_BY_SIZE[normalizeOption(size)] = variation;
+      }
+      if (getVariationColor(variation)) {
+        COLOR_VARIES = true;
+      }
     });
   }
 
@@ -1007,7 +1019,7 @@
 
     target.innerHTML = "";
     selectedColor = "";
-    if (!terms.length) {
+    if (!COLOR_VARIES || !terms.length) {
       wrap.style.display = "none";
       return;
     }
@@ -1032,27 +1044,44 @@
   }
 
   function syncSelectedVariation() {
-    selectedVariation = findMatchingVariation();
+    selectVariationForCurrentOptions();
     renderPrice(PRODUCT);
+  }
+
+  function selectVariationForCurrentOptions() {
+    if (!VARIATIONS.length) {
+      selectedVariation = null;
+      return;
+    }
+
+    if (selectedSize) {
+      var bySize = VARIATION_BY_SIZE[normalizeOption(selectedSize)];
+      if (bySize && !COLOR_VARIES) {
+        selectedVariation = bySize;
+        return;
+      }
+    }
+
+    selectedVariation = findMatchingVariation();
   }
 
   function findMatchingVariation() {
     if (!VARIATIONS.length) return null;
-    if (selectedSize && VARIATION_BY_SIZE[normalizeOption(selectedSize)]) {
-      return VARIATION_BY_SIZE[normalizeOption(selectedSize)];
+
+    if (selectedSize && !COLOR_VARIES) {
+      return VARIATION_BY_SIZE[normalizeOption(selectedSize)] || null;
     }
 
     return VARIATIONS.filter(function (variation) {
-      var attributes = variation.__attributes || variation.attributes || [];
       var text = String(variation.variation || "").toLowerCase();
-      var sizeValue = getVariationAttributeValue(attributes, /size/i);
-      var colorValue = getVariationAttributeValue(attributes, /colou?r/i);
+      var sizeValue = getVariationSize(variation);
+      var colorValue = getVariationColor(variation);
       var sizeMatches = !selectedSize ||
-        String(sizeValue || "").toLowerCase() === String(selectedSize).toLowerCase() ||
+        normalizeOption(sizeValue) === normalizeOption(selectedSize) ||
         text.indexOf(String(selectedSize).toLowerCase()) >= 0;
-      var colorMatches = !selectedColor ||
+      var colorMatches = !COLOR_VARIES || !selectedColor ||
         !colorValue ||
-        String(colorValue).toLowerCase() === String(selectedColor).toLowerCase() ||
+        normalizeOption(colorValue) === normalizeOption(selectedColor) ||
         text.indexOf(String(selectedColor).toLowerCase()) >= 0;
 
       return sizeMatches && colorMatches;
@@ -1060,14 +1089,17 @@
   }
 
   function getVariationSize(variation) {
-    var attributes = variation.__attributes || variation.attributes || [];
-    var sizeValue = getVariationAttributeValue(attributes, /size/i);
-    var text = String(variation.variation || "").toLowerCase();
-    var match;
+    var text = String(variation.variation || "");
+    var match = text.match(/size\s*:\s*([^,]+)/i);
+    if (match && match[1]) return match[1].trim();
 
-    if (sizeValue) return sizeValue;
-    match = text.match(/size\s*:\s*([^,]+)/i);
-    return match && match[1] ? match[1].trim() : "";
+    var attributes = variation.__attributes || variation.attributes || [];
+    return getVariationAttributeValue(attributes, /size/i);
+  }
+
+  function getVariationColor(variation) {
+    var attributes = variation.__attributes || variation.attributes || [];
+    return getVariationAttributeValue(attributes, /colou?r/i);
   }
 
   function normalizeOption(value) {
@@ -1079,7 +1111,9 @@
       return pattern.test(attribute.name || "");
     })[0];
 
-    return match && match.value ? match.value : "";
+    if (!match || match.value == null) return "";
+    var value = String(match.value).trim();
+    return value;
   }
 
   function renderMainButton() {
@@ -1162,11 +1196,9 @@
       window.location.href = DESIGNER_URL + "?" + params.toString();
       return;
     }
-    if (VARIATIONS.length && !selectedVariation) {
-      selectedVariation = findMatchingVariation();
-    }
-    if (VARIATIONS.length && !selectedVariation && selectedSize && VARIATION_BY_SIZE[normalizeOption(selectedSize)]) {
-      selectedVariation = VARIATION_BY_SIZE[normalizeOption(selectedSize)];
+    selectVariationForCurrentOptions();
+    if (VARIATIONS.length && !selectedVariation && selectedSize) {
+      selectedVariation = VARIATION_BY_SIZE[normalizeOption(selectedSize)] || null;
     }
     if (VARIATIONS.length && !selectedVariation) {
       showToast("Please choose an available size");

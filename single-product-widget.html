@@ -776,6 +776,8 @@
   var CUSTOM_TAG_SLUGS = ["customizable", "customize", "custom", "design-your-own"];
   var PRODUCT = null;
   var IS_CUSTOM = false;
+  var VARIATIONS = [];
+  var selectedVariation = null;
   var selectedColor = "";
   var selectedSize = "";
 
@@ -836,11 +838,38 @@
           throw new Error("Product not found");
         }
         IS_CUSTOM = isCustomProduct(PRODUCT);
-        renderProduct(PRODUCT);
+        return loadVariations(PRODUCT).then(function () {
+          renderProduct(PRODUCT);
+        });
       })
       .catch(function () {
         showLoadError("Product could not be loaded");
       });
+  }
+
+  function loadVariations(product) {
+    var variations = Array.isArray(product.variations) ? product.variations : [];
+    if (!variations.length) {
+      VARIATIONS = [];
+      selectedVariation = null;
+      return Promise.resolve();
+    }
+
+    return Promise.all(variations.map(function (variation) {
+      return fetch(API + "/products/" + encodeURIComponent(variation.id), { credentials: "same-origin" })
+        .then(checkResponse)
+        .then(function (details) {
+          details.__attributes = variation.attributes || [];
+          return details;
+        })
+        .catch(function () {
+          variation.__attributes = variation.attributes || [];
+          return variation;
+        });
+    })).then(function (details) {
+      VARIATIONS = details;
+      selectedVariation = null;
+    });
   }
 
   function checkResponse(response) {
@@ -880,6 +909,10 @@
 
   function renderPrice(product) {
     var price = document.getElementById("vcSpPrice");
+    if (selectedVariation && selectedVariation.prices) {
+      price.innerHTML = formatVariationPrice(selectedVariation);
+      return;
+    }
     if (product.price_html && /\d/.test(product.price_html)) {
       price.innerHTML = product.price_html;
       return;
@@ -935,19 +968,26 @@
     }
 
     wrap.style.display = "";
+    var activeIndex = terms.findIndex(function (term) {
+      return term && term.default;
+    });
+    if (activeIndex < 0) activeIndex = 0;
+
     terms.forEach(function (term, index) {
       var button = document.createElement("button");
       button.type = "button";
-      button.className = "vc-sp-size" + (index === 0 ? " is-active" : "");
+      button.className = "vc-sp-size" + (index === activeIndex ? " is-active" : "");
       button.textContent = term.name;
-      if (index === 0) selectedSize = term.name;
+      if (index === activeIndex) selectedSize = term.name;
       button.addEventListener("click", function () {
         Array.prototype.forEach.call(target.querySelectorAll(".vc-sp-size"), function (item) { item.classList.remove("is-active"); });
         button.classList.add("is-active");
         selectedSize = term.name;
+        syncSelectedVariation();
       });
       target.appendChild(button);
     });
+    syncSelectedVariation();
   }
 
   function renderColorOptions(attribute) {
@@ -974,9 +1014,35 @@
         Array.prototype.forEach.call(target.querySelectorAll(".vc-sp-color"), function (item) { item.classList.remove("is-active"); });
         button.classList.add("is-active");
         selectedColor = term.name;
+        syncSelectedVariation();
       });
       target.appendChild(button);
     });
+    syncSelectedVariation();
+  }
+
+  function syncSelectedVariation() {
+    selectedVariation = findMatchingVariation();
+    renderPrice(PRODUCT);
+  }
+
+  function findMatchingVariation() {
+    if (!VARIATIONS.length) return null;
+
+    return VARIATIONS.filter(function (variation) {
+      var text = [
+        variation.variation || "",
+        (variation.__attributes || variation.attributes || []).map(function (attribute) {
+          return [attribute.name || "", attribute.value || ""].join(": ");
+        }).join(" ")
+      ].join(" ").toLowerCase();
+
+      var sizeMatches = !selectedSize || text.indexOf(String(selectedSize).toLowerCase()) >= 0;
+      var hasColorAttribute = text.indexOf("color:") >= 0 || text.indexOf("colour:") >= 0;
+      var colorMatches = !selectedColor || text.indexOf(String(selectedColor).toLowerCase()) >= 0 || !hasColorAttribute;
+
+      return sizeMatches && colorMatches;
+    })[0] || null;
   }
 
   function renderMainButton() {
@@ -1010,6 +1076,15 @@
     var suffix = prices.currency_suffix || "";
     if (!Number.isFinite(amount)) return "";
     return symbol + (amount / Math.pow(10, decimals)).toLocaleString(undefined, { maximumFractionDigits: decimals }) + suffix;
+  }
+
+  function formatVariationPrice(variation) {
+    var prices = variation.prices || {};
+    var current = formatMoney(prices, prices.price);
+    if (prices.regular_price && prices.sale_price && prices.regular_price !== prices.sale_price) {
+      return '<del>' + escapeHtml(formatMoney(prices, prices.regular_price)) + '</del><ins>' + escapeHtml(current) + '</ins>';
+    }
+    return escapeHtml(current);
   }
 
   function showToast(message) {
@@ -1050,6 +1125,10 @@
       window.location.href = DESIGNER_URL + "?" + params.toString();
       return;
     }
+    if (VARIATIONS.length && !selectedVariation) {
+      showToast("Please choose an available size");
+      return;
+    }
     addToCart();
   };
 
@@ -1057,6 +1136,7 @@
     var button = document.getElementById("vcSpMainBtn");
     var oldText = button.textContent;
     var quantity = Number.parseInt(document.getElementById("vcSpQty").value, 10) || 1;
+    var productId = selectedVariation && selectedVariation.id ? selectedVariation.id : PRODUCT.id;
 
     button.disabled = true;
     button.textContent = "Adding...";
@@ -1072,16 +1152,21 @@
             "Nonce": nonce,
             "X-WC-Store-API-Nonce": nonce
           },
-          body: JSON.stringify({ id: PRODUCT.id, quantity: quantity })
+          body: JSON.stringify({ id: productId, quantity: quantity })
         });
       })
       .then(function (response) {
-        if (!response.ok) throw new Error("Add to cart failed");
+        return response.json().then(function (data) {
+          if (!response.ok) throw new Error(data && data.message ? data.message : "Add to cart failed");
+          return data;
+        });
+      })
+      .then(function () {
         document.body.dispatchEvent(new CustomEvent("wc-blocks_added_to_cart"));
         showAddedModal(quantity);
       })
-      .catch(function () {
-        showToast("Could not add this product to cart");
+      .catch(function (error) {
+        showToast(error.message || "Could not add this product to cart");
       })
       .finally(function () {
         button.disabled = false;

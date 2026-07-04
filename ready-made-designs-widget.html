@@ -5,7 +5,7 @@
      Important:
      - Products are fetched only when they belong to the required
        WooCommerce category slug AND the required WooCommerce tag slug.
-     - Update CONFIG.filterChips if your optional chip category slugs differ.
+     - Add optional chip categories only if those WooCommerce category slugs exist.
      ============================================================ -->
 <style>
   :root {
@@ -451,13 +451,10 @@
     requiredCategorySlug: "ready-made",
     requiredTagSlug: "ready-made",
 
-    // Optional category chips. "All" still requires requiredCategorySlug + requiredTagSlug.
+    // Optional category chips. Keep only "All" unless you have extra ready-made subcategories.
+    // Example extra chip: { slug: "tshirts-ready", label: "T-Shirts" }
     filterChips: [
-      { slug: "all", label: "All" },
-      { slug: "tshirts-ready", label: "T-Shirts" },
-      { slug: "hoodies-ready", label: "Hoodies" },
-      { slug: "mugs-ready", label: "Mugs" },
-      { slug: "posters-ready", label: "Posters" }
+      { slug: "all", label: "All Ready-Made" }
     ],
 
     perPage: 12,
@@ -570,10 +567,11 @@
       return Promise.resolve(bucket[slug]);
     }
 
-    return fetch(endpoint + "?slug=" + encodeURIComponent(slug), { credentials: "same-origin" })
+    return fetch(endpoint + "?per_page=100", { credentials: "same-origin" })
       .then(checkResponse)
       .then(function (items) {
-        var id = Array.isArray(items) && items[0] && items[0].id ? Number(items[0].id) : 0;
+        var match = findBySlug(items, slug);
+        var id = match && match.id ? Number(match.id) : 0;
         bucket[slug] = id;
         return id;
       })
@@ -599,7 +597,7 @@
     return fetch(buildProductsUrl(categoryIds, requiredTagId), { credentials: "same-origin" })
       .then(checkResponse)
       .then(function (products) {
-        var safeProducts = Array.isArray(products) ? products : [];
+        var safeProducts = Array.isArray(products) ? products.filter(productMatchesRequiredTerms) : [];
         cache[cacheKey] = safeProducts;
         return safeProducts;
       });
@@ -609,9 +607,7 @@
     var params = new URLSearchParams();
     params.set("per_page", String(CONFIG.perPage));
     params.set("category", categoryIds.join(","));
-    params.set("category_operator", "and");
     params.set("tag", String(tagId));
-    params.set("tag_operator", "and");
 
     if (state.sort === "price" || state.sort === "price-desc") {
       params.set("orderby", "price");
@@ -632,6 +628,16 @@
       throw new Error("WooCommerce Store API request failed: " + response.status);
     }
     return response.json();
+  }
+
+  function findBySlug(items, slug) {
+    if (!Array.isArray(items)) {
+      return null;
+    }
+
+    return items.filter(function (item) {
+      return item && item.slug === slug;
+    })[0] || null;
   }
 
   function renderLoading() {
@@ -697,6 +703,22 @@
     })[0];
 
     return (matched || categories[0] || {}).name || "";
+  }
+
+  function productMatchesRequiredTerms(product) {
+    var matchesRequiredCategory = productHasTerm(product, "categories", CONFIG.requiredCategorySlug);
+    var matchesRequiredTag = productHasTerm(product, "tags", CONFIG.requiredTagSlug);
+    var matchesChipCategory = state.activeChip === "all" || productHasTerm(product, "categories", state.activeChip);
+
+    return matchesRequiredCategory && matchesRequiredTag && matchesChipCategory;
+  }
+
+  function productHasTerm(product, key, slug) {
+    var terms = product && Array.isArray(product[key]) ? product[key] : [];
+
+    return terms.some(function (term) {
+      return term && term.slug === slug;
+    });
   }
 
   function formatPrice(prices) {
